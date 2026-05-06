@@ -3,75 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <title>GrammaLab Kids | Pro</title>
+    <title>GrammaLab Kids | Absolute Edition</title>
     <style>
         :root{--p:#00a2ff;--bg:#0f172a;--ai:#8b5cf6;--s:#10b981;--red:#ef4444;--gold:#f59e0b;--card:#1e293b}
-        body{margin:0;font-family:sans-serif;background:var(--bg);color:#fff;user-select:none;touch-action:manipulation}
+        body{margin:0;font-family:'Segoe UI',sans-serif;background:var(--bg);color:#fff;user-select:none;touch-action:manipulation;overflow-x:hidden}
+        
         header{background:#1e293b;padding:15px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--p);position:sticky;top:0;z-index:100}
-        .screen{display:none;padding:15px;max-width:500px;margin:0 auto}
+        .screen{display:none;padding:15px;max-width:500px;margin:0 auto;animation:slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28)}
         .active{display:block}
-        .btn{padding:16px;border-radius:18px;border:none;font-weight:900;cursor:pointer;width:100%;margin:8px 0;color:#fff;text-transform:uppercase;transition:.2s}
+        
+        .btn{padding:16px;border-radius:18px;border:none;font-weight:900;cursor:pointer;width:100%;margin:8px 0;color:#fff;text-transform:uppercase;transition:0.2s}
         .btn-p{background:var(--p);box-shadow:0 5px 0 #0369a1}
         .btn-ai{background:var(--ai);box-shadow:0 5px 0 #6d28d9}
         .btn-s{background:var(--s);box-shadow:0 5px 0 #047857}
+        .btn:active{transform:translateY(3px);box-shadow:none}
+
         .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-        .card{background:var(--card);padding:15px;border-radius:20px;text-align:center;border:1px solid #334155}
-        #stage{background:#fff;border-radius:30px;height:300px;position:relative;border:5px solid var(--ai);overflow:hidden;margin-bottom:15px;display:flex;align-items:center;justify-content:center}
-        .mole{width:80px;height:95px;background:#78350f;border-radius:25px 25px 5px 5px;position:absolute;bottom:-110px;transition:.3s;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;border:3px solid #451a03;text-align:center}
-        .mole.up{bottom:35px}
-        .plane{position:absolute;background:var(--p);padding:10px;border-radius:15px;left:110%;animation:fly linear infinite;font-weight:900}
-        .badge{background:#334155;color:#fff;border:1px solid var(--ai);padding:12px 4px;border-radius:15px;font-size:10px;font-weight:700;position:relative;cursor:pointer}
-        .count{position:absolute;top:-6px;right:-6px;background:var(--gold);color:#000;border-radius:10px;padding:2px 5px;font-size:9px}
-        @keyframes fly{from{left:110%}to{left:-500px}}
+        .card{background:var(--card);padding:15px;border-radius:20px;text-align:center;border:1px solid #334155;transition:0.3s}
+        
+        #stage{background:#fff;border-radius:30px;height:320px;position:relative;border:5px solid var(--ai);overflow:hidden;margin-bottom:15px;display:flex;align-items:center;justify-content:center}
+        
+        /* КРОТЫ с физикой */
+        .mole{width:80px;height:100px;background:#78350f;border-radius:25px 25px 5px 5px;position:absolute;bottom:-120px;transition:bottom 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;border:4px solid #451a03;text-align:center;box-shadow: 0 10px 0 rgba(0,0,0,0.2)}
+        .mole.up{bottom:40px}
+
+        /* САМОЛЕТЫ */
+        .plane{position:absolute;background:var(--p);padding:12px;border-radius:20px;left:110%;animation:fly linear infinite;font-weight:900;box-shadow:0 4px 0 #075985;white-space:nowrap}
+
+        .badge{background:#334155;color:#fff;border:1px solid var(--ai);padding:12px 2px;border-radius:15px;font-size:10px;font-weight:700;position:relative;cursor:pointer}
+        .badge.full{background:var(--s);border-color:#fff}
+
+        @keyframes fly{from{left:110%}to{left:-600px}}
+        @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+        .shake{animation:shake 0.3s ease-in-out}
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight:900;color:var(--p)">GrammaLab Kids</div>
+    <div style="font-weight:900;color:var(--p);font-size:18px">GrammaLab Kids PRO</div>
     <div id="st">0 ⭐ | <span id="hp" style="color:var(--red)">❤️❤️❤️</span></div>
 </header>
 
 <div id="sc-menu" class="screen active">
+    <div class="card" style="margin-bottom:15px"><b>ВЫБЕРИ ИСПЫТАНИЕ:</b></div>
     <div class="grid" id="menu-grid"></div>
 </div>
 
 <div id="sc-edit" class="screen">
     <div class="card" style="background:var(--ai);margin-bottom:15px;border:none">
-        <b style="font-size:12px">КЛИКАЙ ТЕМЫ ДЛЯ СБОРКИ ИГРЫ:</b>
-        <div id="topic-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"></div>
+        <b>ИНТЕЛЛЕКТ-КОНСТРУКТОР (13 ТЕМ)</b>
+        <div id="topic-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px"></div>
     </div>
-    <div id="factory" style="max-height:150px;overflow-y:auto;margin-bottom:10px"></div>
-    <button class="btn btn-s" onclick="startGame()">ИГРАТЬ ▶️</button>
-    <button class="btn btn-ai" onclick="shareGame()">🔗 ПЕРЕДАТЬ МОЮ ИГРУ</button>
+    <div id="factory" style="max-height:180px;overflow-y:auto;margin-bottom:15px;background:rgba(255,255,255,0.05);border-radius:15px"></div>
+    <button class="btn btn-s" onclick="startGame()">НАЧАТЬ ИГРУ ▶️</button>
+    <button class="btn btn-p" style="background:#6366f1" onclick="shareGame()">🔗 СКОПИРОВАТЬ ССЫЛКУ ИГРЫ</button>
 </div>
 
 <div id="sc-game" class="screen">
-    <div id="question-text" style="font-size:17px;font-weight:900;text-align:center;margin-bottom:12px;color:var(--p)"></div>
+    <div id="question-text" style="font-size:18px;font-weight:900;text-align:center;margin-bottom:15px;color:var(--p);min-height:50px"></div>
     <div id="stage"></div>
     <div id="options-grid" class="grid"></div>
 </div>
 
 <script>
-const modes=[{id:'mole',n:'Кроты',e:'🔨'},{id:'plane',n:'Самолет',e:'✈️'},{id:'words',n:'Слова',e:'🔠'},{id:'tf',n:'П/Л',e:'⚖️'},{id:'sort',n:'Группы',e:'↔️'},{id:'quiz',n:'Тест',e:'📝'}];
-const aiData={
-    "1. Сущ.": [{q:"Род 'Тюль'?",a:["М.р.","Ж.р."]},{q:"Только ед.ч.?",a:["Золото","Брюки"]}],
-    "2. Обращ.": [{q:"Знаки в 'Мам пой'?",a:["Мам, пой!","Мам пой"]}],
-    "3. Речь": [{q:"Много глаголов в:",a:["Повеств.","Описании"]}],
-    "4. Лексика": [{q:"Синоним 'Вдруг':",a:["Внезапно","Тихо"]}],
-    "5. Однород.": [{q:"Перед 'А':",a:[", всегда","нет"]}],
-    "6. Обобщающие": [{q:"Знак после ОС:",a:[":","—"]}],
-    "7. Пр. Речь": [{q:"Автор ПЕРЕД:",a:["А: 'П.'","'П',-а"]}],
-    "8. Подлеж.": [{q:"Вопрос:",a:["Кто? Что?","Где?"]}],
-    "9. Сказуемое": [{q:"Линии:",a:["==","__"]}],
-    "10. Втор.чл.": [{q:"Определение:",a:["Какой?","Где?"]}],
-    "11. Тире П-С": [{q:"'Он ученик' — нужно?",a:["Нет","Да"]}],
-    "12. Местоим.": [{q:"2 лицо мн.ч.:",a:["Вы","Мы"]}],
-    "13. Глагол": [{q:"Исключение:",a:["Видеть","Брить"]}]
-};
+const modes=[{id:'mole',n:'Кроты',e:'🔨'},{id:'plane',n:'Самолет',e:'✈️'},{id:'words',n:'Слова',e:'🔠'},{id:'tf',n:'Верно?',e:'⚖️'},{id:'sort',n:'Группы',e:'↔️'},{id:'quiz',n:'Тест',e:'📝'}];
 
-// Заполняем темы до 10 вопросов
-Object.keys(aiData).forEach(t=>{while(aiData[t].length<10)aiData[t].push({q:t+" вопрос "+(aiData[t].length+1),a:["Да","Нет"]})});
+// ГИГАНТСКАЯ БАЗА ИИ (130 ВОПРОСОВ)
+const aiData = {
+    "1. Сущ.": [
+        {q:"Род слова 'ТЮЛЬ'?",a:["Мужской","Женский"]},{q:"Род слова 'МОЗОЛЬ'?",a:["Женский","Мужской"]},
+        {q:"Только ед.ч.:",a:["Молоко","Ножницы"]},{q:"Только мн.ч.:",a:["Сумерки","Лес"]},
+        {q:"3-е склонение:",a:["Дочь","Дом"]},{q:"Падеж 'о герое':",a:["Предложный","Дательный"]},
+        {q:"Собственное имя:",a:["Иртыш","Река"]},{q:"Неодушевленное:",a:["Сугроб","Робот"]},
+        {q:"Мн.ч. 'Директор':",a:["Директора","Директоры"]},{q:"Одушевленное:",a:["Кукла","Стол"]}
+    ],
+    "2. Обращ.": [
+        {q:"Где запятая в начале?",a:["Саша, иди.","Саша иди."]},{q:"Где в середине?",a:["Иди, Саша, в дом.","Иди Саша в дом."]},
+        {q:"Знак в 'Друг мой постой'?",a:["Друг мой, постой!","Друг, мой постой!"]},{q:"Является членом?",a:["Нет","Да"]},
+        {q:"Знак перед ОС?",a:[":","—"]},{q:"О ком речь?",a:["Кого зовут","Кто делает"]},
+        {q:"Схема: О, ...",a:["Верно","Ложно"]},{q:"В конце:",a:["Пока, мама.","Пока мама."]},
+        {q:"С ! знаком:",a:["Мама! Слушай.","Мама слушай."]}, {q:"Можно заменить?",a:["Нет","Да"]}
+    ],
+    "3. Речь": [
+        {q:"Один кадр видео:",a:["Описание","Повеств."]},{q:"Много действий:",a:["Повеств.","Описание"]},
+        {q:"Вопрос 'Почему?':",a:["Рассуждение","Описание"]},{q:"Тезис и довод:",a:["Рассуждение","Рассказ"]},
+        {q:"Картина словами:",a:["Описание","Рассуждение"]},{q:"Сюжет во времени:",a:["Повеств.","Описание"]},
+        {q:"Вывод в конце:",a:["Рассуждение","Повеств."]},{q:"Вопрос 'Каков?':",a:["Описание","Повеств."]},
+        {q:"Вопрос 'Что было?':",a:["Повеств.","Рассужд."]}, {q:"Научная статья:",a:["Рассуждение","Описание"]}
+    ],
+    "4. Лексика": [
+        {q:"Синоним 'Врач':",a:["Доктор","Учитель"]},{q:"Антоним 'Тьма':",a:["Свет","Ночь"]},
+        {q:"Омонимы:",a:["Ключ/Ключ","Дом/Здание"]},{q:"Прямое знач.:",a:["Золотое кольцо","Золотые руки"]},
+        {q:"Переносное:",a:["Часы стоят","Дом стоит"]},{q:"Фразеологизм:",a:["Бить баклуши","Бить мяч"]},
+        {q:"Устаревшее:",a:["Очи","Глаза"]},{q:"Неологизм:",a:["Селфи","Стол"]},
+        {q:"Синоним 'Храбрый':",a:["Смелый","Злой"]},{q:"Антоним 'Мир':",a:["Война","Земля"]}
+    ],
+    "5. Однород.": [
+        {q:"Запятая перед А:",a:["Нужна","Нет"]},{q:"Перед НО:",a:["Нужна","Нет"]},
+        {q:"Один союз И:",a:["Нет запятой","Нужна"]},{q:"И, И, И:",a:["Нужна ,","Нет"]},
+        {q:"Вопрос:",a:["Одинаковый","Разный"]},{q:"Связь:",a:["Интонация","Падеж"]},
+        {q:"Член предлож.:",a:["Один и тот же","Любой"]},{q:"Схема: О и О",a:["Без запятой","С запятой"]},
+        {q:"ИЛИ (1 раз):",a:["Нет запятой","Есть ,"]},{q:"Найди ОЧП:",a:["Синий и белый","Я сплю"]}
+    ],
+    "6. Обобщающие": [
+        {q:"ОС : О, О",a:["Верно","Ложно"]},{q:"О, О — ОС",a:["Верно","Ложно"]},
+        {q:"Знак ПЕРЕД:",a:[":","—"]},{q:"Знак ПОСЛЕ:",a:[">—","—"]},
+        {q:"Схема: ОС: О, О...",a:["Верно","Ошибка"]},{q:"ОС — это:",a:["Слово-целое","Часть"]},
+        {q:"Вопрос:",a:["Тот же, что у О","Другой"]},{q:"Член предлож.:",a:["Тот же","Разный"]},
+        {q:"Найди ОС: Фрукты: ...",a:["Фрукты","Яблоки"]},{q:"Все: ... ОС?",a:["Все","Люди"]}
+    ],
+    "7. Пр. Речь": [
+        {q:"А: 'П.'",a:["Верно","Ложно"]},{q:"'П', — а.",a:["Верно","Ложно"]},
+        {q:"Кавычки:",a:["Нужны всегда","Нет"]},{q:"Буква П:",a:["Всегда большая","Маленькая"]},
+        {q:"Буква а:",a:["Маленькая","Большая"]},{q:"Знак после А:",a:[":",","]},
+        {q:"Знак после П?:",a:["—",":"]},{q:"В начале:",a:["'П!' — а.","'п' - А."]},
+        {q:"Прямая речь — это:",a:["Точные слова","Примерно"]},{q:"А — это:",a:["Слова автора","Речь"]}
+    ],
+    "8. Подлеж.": [
+        {q:"Вопрос:",a:["Кто? Что?","Кого? Чей?"]},{q:"Подчеркиваем:",a:["1 линией","2 линиями"]},
+        {q:"Падеж:",a:["Именительный","Любой"]},{q:"Чем выражено:",a:["Сущ/Местоим","Глаголом"]},
+        {q:"Главный член?",a:["Да","Нет"]},{q:"Найди: 'Мы ушли'",a:["Мы","Ушли"]},
+        {q:"Найди: 'Снег идет'",a:["Снег","Идет"]},{q:"Может быть ?:",a:["Да","Нет"]},
+        {q:"Кто поет?",a:["Подлеж.","Дополн."]}, {q:"Что лежит?",a:["Подлеж.","Обстоят."]}
+    ],
+    "9. Сказуемое": [
+        {q:"Вопрос:",a:["Что делает?","Какой?"]},{q:"Подчеркиваем:",a:["2 линиями","1 линией"]},
+        {q:"Связано с:",a:["Подлежащим","Обстоятельством"]},{q:"Чаще всего:",a:["Глагол","Сущ."]},
+        {q:"Главный член?",a:["Да","Нет"]},{q:"Найди: 'Я сплю'",a:["Сплю","Я"]},
+        {q:"'Он был врачом':",a:["Был врачом","Он"]},{q:"Схема: ===",a:["Сказуемое","Подлеж."]},
+        {q:"Действие — это:",a:["Сказуемое","Объект"]}, {q:"Каков предмет?",a:["Сказуемое","Подлеж."]}
+    ],
+    "10. Втор.чл.": [
+        {q:"Определение:",a:["Какой? Чей?","Где?"]},{q:"Обстоятельство:",a:["Где? Когда?","Кто?"]},
+        {q:"Дополнение:",a:["Падежи (не Им.)","Как?"]},{q:"Волнистая линия:",a:["Определение","Обстоят."]},
+        {q:"Пунктир _ _ _",a:["Дополнение","Опред."]}, {q:"Точка-пунктир ._.",a:["Обстоятельство","Доп."]},
+        {q:"Яркое (солнце):",a:["Определение","Доп."]}, {q:"Иду (домой):",a:["Обстоятельство","Опред."]},
+        {q:"Вижу (кота):",a:["Дополнение","Обстоят."]}, {q:"Всего их типа:",a:["Три","Два"]}
+    ],
+    "11. Тире П-С": [
+        {q:"Сущ — Сущ:",a:["Нужно","Нет"]},{q:"Я ученик:",a:["Нет","Да"]},
+        {q:"Перед ЭТО:",a:["Нужно","Нет"]},{q:"Число — Число:",a:["Нужно","Нет"]},
+        {q:"Местоим — Сущ:",a:["Нет","Да"]},{q:"Она врач:",a:["Нет","Да"]},
+        {q:"Книга — друг:",a:["Нужно","Нет"]},{q:"Пять — цифра:",a:["Нужно","Нет"]},
+        {q:"Москва — город:",a:["Нужно","Нет"]}, {q:"Он мой брат:",a:["Нет","Да"]}
+    ],
+    "12. Местоим.": [
+        {q:"Личное 1 л., ед.ч:",a:["Я","Ты"]},{q:"Личное 2 л., мн.ч:",a:["Вы","Они"]},
+        {q:"Личное 3 л., ед.ч:",a:["Он/Она/Оно","Мы"]},{q:"Заменяет:",a:["Имя","Действие"]},
+        {q:"Мы — это:",a:["1 лицо","3 лицо"]},{q:"Они — это:",a:["3 лицо","2 лицо"]},
+        {q:"Указывает на:",a:["Предмет","Признак"]},{q:"Найди:",a:["Тебя","Там"]},
+        {q:"С предлогом:",a:["У него","Унего"]}, {q:"Вопрос:",a:["Тот же, что у Сущ.","Как?"]}
+    ],
+    "13. Глагол": [
+        {q:"Вопрос:",a:["Что делать?","Кто?"]},{q:"Нач. форма:",a:["Инфинитив","Время"]},
+        {q:"Исключение 2 спр.:",a:["Слышать","Брить"]},{q:"Исключение 1 спр.:",a:["Стелить","Смотреть"]},
+        {q:"Не с глаголом:",a:["Раздельно","Слитно"]},{q:"Прош. время:",a:["Шел","Иду"]},
+        {q:"Будущ. время:",a:["Буду петь","Пою"]},{q:"Изменяется по:",a:["Временам","Падежам"]},
+        {q:"В прош.вр. по:",a:["Родам","Лицам"]}, {q:"Спряжение это:",a:["Лицо и Число","Род"]}
+    ]
+};
 
 let currentMode='', questions=[], curIdx=0, score=0, lives=3, lock=false, prog={};
 
@@ -86,40 +178,30 @@ function initEditor(){
     const g=document.getElementById('topic-grid');g.innerHTML='';
     Object.keys(aiData).forEach(t=>{
         prog[t]=0; const b=document.createElement('button');b.className='badge';
-        b.innerHTML=`${t} <span class="count">0/10</span>`;
-        b.onclick=()=>{if(prog[t]<10){addQ(t,aiData[t][prog[t]]);prog[t]++;b.querySelector('.count').innerText=prog[t]+'/10'}};
+        b.innerHTML=`${t} <span style="color:var(--gold)">0/10</span>`;
+        b.onclick=()=>{
+            if(prog[t]<10){
+                addQ(t,aiData[t][prog[t]]);
+                prog[t]++;
+                b.querySelector('span').innerText=prog[t]+'/10';
+                if(prog[t]===10)b.classList.add('full');
+            }
+        };
         g.appendChild(b);
     });
-    // ПРОВЕРКА: Если пришли по ссылке
-    const params = new URLSearchParams(window.location.search);
-    if(params.has('data')) {
-        alert("Загружена игра от друга!");
-        questions = JSON.parse(atob(params.get('data')));
-        startGame();
-    }
 }
 
 function addQ(t,d){
     const f=document.getElementById('factory');const div=document.createElement('div');
-    div.style.cssText="background:#334155;padding:5px;margin:3px;border-radius:8px;font-size:10px";
+    div.style.cssText="background:#334155;padding:8px;margin:5px;border-radius:10px;font-size:11px;animation:slideUp 0.3s";
     div.innerHTML=`<b>${t}:</b> ${d.q} <input type="hidden" class="data-q" value='${JSON.stringify({q:d.q,opts:[{t:d.a[0],ok:1},{t:d.a[1],ok:0}].sort(()=>Math.random()-.5)})'>`;
     f.prepend(div);
 }
 
 function startGame(){
-    if(!questions.length) {
-        document.querySelectorAll('#factory div').forEach(c=>questions.push(JSON.parse(c.querySelector('.data-q').value)));
-    }
-    if(questions.length){curIdx=0;score=0;lives=3;showScreen('sc-game');renderQ()}
-}
-
-function shareGame(){
-    const sharedData = [];
-    document.querySelectorAll('#factory div').forEach(c=>sharedData.push(JSON.parse(c.querySelector('.data-q').value)));
-    const base64 = btoa(JSON.stringify(sharedData));
-    const link = window.location.origin + window.location.pathname + "?data=" + base64;
-    navigator.clipboard.writeText(link);
-    alert("Ссылка скопирована! Отправь её другу.");
+    questions=[]; lives=3; score=0;
+    document.querySelectorAll('#factory div').forEach(c=>questions.push(JSON.parse(c.querySelector('.data-q').value)));
+    if(questions.length){curIdx=0;showScreen('sc-game');renderQ()}else alert("Выбери хотя бы 1 вопрос!");
 }
 
 function renderQ(){
@@ -129,12 +211,21 @@ function renderQ(){
     st.innerHTML=""; document.getElementById('options-grid').innerHTML="";
     
     if(currentMode==='mole'){
+        st.style.background="#5d4037";
         it.opts.forEach((v,i)=>{
             const m=document.createElement('div');m.className='mole';m.innerText=v.t;
             m.style.left=(20+i*150)+'px';m.onclick=()=>check(v.ok,m);st.appendChild(m);
             setTimeout(()=>m.classList.add('up'),100);
         });
+    } else if(currentMode==='plane'){
+        st.style.background="#0ea5e9";
+        it.opts.forEach((v,i)=>{
+            const p=document.createElement('div');p.className='plane';p.innerText=v.t;
+            p.style.top=(40+i*90)+'px';p.style.animationDuration=(4+i*2)+'s';
+            p.onclick=()=>check(v.ok,p);st.appendChild(p);
+        });
     } else {
+        st.style.background="#fff";
         it.opts.forEach(v=>{
             const b=document.createElement('button');b.className='btn btn-p';b.innerText=v.t;
             b.onclick=()=>check(v.ok,b);document.getElementById('options-grid').appendChild(b);
@@ -144,11 +235,22 @@ function renderQ(){
 
 function check(ok,el){
     if(lock)return; lock=true;
-    if(ok){score+=10; if(el)el.style.background='var(--s)'}
-    else{lives--; if(el)el.style.background='var(--red)'}
-    if(lives<=0){alert("Игра окончена!");location.reload();return}
+    if(ok){
+        score+=25; if(el)el.style.background='var(--s)';
+    } else {
+        lives--; if(el){el.classList.add('shake'); el.style.background='var(--red)'}
+        if(lives<=0){alert("GAME OVER! Твой счет: "+score);location.reload();return}
+    }
     curIdx++;
-    setTimeout(()=>{if(curIdx<questions.length)renderQ();else alert("Победа! Счет: "+score)},600);
+    setTimeout(()=>{if(curIdx<questions.length)renderQ();else alert("ГРАММАТИЧЕСКИЙ ГЕНИЙ! Счет: "+score)},600);
+}
+
+function shareGame(){
+    const shared = [];
+    document.querySelectorAll('#factory div').forEach(c=>shared.push(JSON.parse(c.querySelector('.data-q').value)));
+    const link = window.location.origin + window.location.pathname + "?data=" + btoa(unescape(encodeURIComponent(JSON.stringify(shared))));
+    navigator.clipboard.writeText(link);
+    alert("Ссылка скопирована! Отправь её другу.");
 }
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
