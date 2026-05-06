@@ -3,68 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GrammaLab PRO: Our Edition</title>
+    <title>GrammaLab PRO 8.0</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root { --p: #00a2ff; --bg: #f0f4f8; --ai: #6c5ce7; --s: #2ecc71; --red: #ff4757; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); touch-action: manipulation; user-select: none; }
-        header { background: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000; }
-        
-        .screen { display: none; padding: 15px; max-width: 500px; margin: 0 auto; animation: slideIn 0.3s ease-out; }
+        header { background: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000; }
+        .screen { display: none; padding: 15px; max-width: 500px; margin: 0 auto; }
         .active { display: block; }
-        
-        .btn { padding: 18px; border-radius: 22px; border: none; font-weight: 900; cursor: pointer; width: 100%; margin: 8px 0; font-size: 17px; color: white; text-transform: uppercase; transition: 0.2s; position: relative; }
-        .btn-p { background: var(--p); box-shadow: 0 6px 0 #0081cc; }
-        .btn-ai { background: var(--ai); box-shadow: 0 6px 0 #5649c0; }
-        .btn-s { background: var(--s); box-shadow: 0 6px 0 #219150; }
-        .btn:active { transform: translateY(4px); box-shadow: none; }
-        
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .card { background: white; padding: 20px; border-radius: 25px; text-align: center; border: 2px solid #e2e8f0; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
-        .card span { font-size: 40px; display: block; margin-bottom: 8px; }
-
-        #stage { background: white; border-radius: 35px; height: 350px; position: relative; border: 6px solid var(--p); overflow: hidden; margin-bottom: 15px; }
-
-        /* НАШИ МЕХАНИКИ */
-        #player { width: 35px; height: 35px; background: var(--ai); position: absolute; border-radius: 10px; border: 3px solid white; z-index: 10; transition: 0.1s linear; }
-        .mole { width: 80px; height: 100px; background: #8d6e63; border-radius: 40px 40px 10px 10px; position: absolute; bottom: -120px; transition: 0.4s; color: white; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; font-weight: bold; border: 3px solid #5d4037; }
-        .mole.up { bottom: 20px; }
-
-        #joy { width: 100px; height: 100px; background: rgba(0,0,0,0.05); border-radius: 50%; margin: 10px auto; position: relative; display: none; border: 2px dashed #ccc; }
-        #stick { width: 50px; height: 50px; background: var(--ai); border-radius: 50%; position: absolute; left: 25px; top: 25px; }
-
-        #q-text { font-size: 22px; font-weight: 900; color: #2d3436; text-align: center; margin-bottom: 10px; }
-        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .btn { padding: 18px; border-radius: 22px; border: none; font-weight: 900; cursor: pointer; width: 100%; margin: 8px 0; font-size: 16px; color: white; text-transform: uppercase; transition: 0.2s; }
+        .btn-p { background: var(--p); box-shadow: 0 5px 0 #0081cc; }
+        .btn-ai { background: var(--ai); box-shadow: 0 5px 0 #5649c0; }
+        .btn-s { background: var(--s); box-shadow: 0 5px 0 #219150; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card { background: white; padding: 15px; border-radius: 20px; border: 2px solid #e2e8f0; margin-bottom: 10px; }
+        #stage { background: white; border-radius: 30px; height: 350px; position: relative; border: 5px solid var(--p); overflow: hidden; margin-bottom: 15px; }
+        #player { width: 35px; height: 35px; background: var(--ai); position: absolute; border-radius: 10px; border: 3px solid white; z-index: 10; }
+        .target { width: 90px; height: 100px; background: #8d6e63; border-radius: 35px 35px 5px 5px; position: absolute; bottom: -120px; transition: 0.4s; color: white; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 11px; font-weight: bold; padding: 8px; box-sizing: border-box; border: 3px solid #5d4037; }
+        .target.up { bottom: 20px; }
+        #joy { width: 100px; height: 100px; background: rgba(0,0,0,0.1); border-radius: 50%; margin: 10px auto; position: relative; border: 2px dashed #ccc; display: none; }
+        #stick { width: 45px; height: 45px; background: var(--ai); border-radius: 50%; position: absolute; left: 27px; top: 27px; }
+        /* Стиль для радио-кнопки */
+        .radio-check { width: 22px; height: 22px; cursor: pointer; accent-color: var(--s); }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight:900; color:var(--ai); font-size: 22px;">GRAMMA PRO</div>
-    <div id="score-val" style="font-weight:900; font-size: 20px;">0 ⭐</div>
-    <button onclick="location.reload()" style="background:none; border:none; font-size:28px;">🏠</button>
+    <div style="font-weight:900; color:var(--p);">GRAMMA PRO 8.0</div>
+    <div id="score-val" style="font-weight:900;">0 ⭐</div>
+    <button onclick="location.reload()" style="background:none; border:none; font-size:25px;">🏠</button>
 </header>
 
 <div id="sc-menu" class="screen active">
     <div class="grid" id="menu-box"></div>
-    <button class="btn btn-s" style="margin-top:20px;" onclick="importGame()">📥 ЗАГРУЗИТЬ КОД</button>
+    <button class="btn btn-s" onclick="importGame()">📥 ЗАГРУЗИТЬ ИГРУ</button>
 </div>
 
 <div id="sc-edit" class="screen">
-    <div class="card" style="margin-bottom:15px;">
-        <b>🤖 ИИ Gramma:</b> Выбери тему для генерации
-        <div id="ai-topics" class="grid" style="margin-top:10px"></div>
+    <div class="card">
+        <b>🤖 ИИ ТЕМЫ (13):</b>
+        <div id="ai-list" class="grid" style="margin-top:10px; grid-template-columns: repeat(3, 1fr);"></div>
     </div>
     <div id="factory"></div>
-    <button class="btn" style="background:#636e72" onclick="addQ()">➕ СВОЙ ВОПРОС</button>
-    <div class="grid">
-        <button class="btn btn-s" onclick="exportCode()">📤 КОД</button>
-        <button class="btn btn-p" onclick="startPlay()">ИГРАТЬ ▶️</button>
-    </div>
+    <button class="btn btn-p" onclick="startPlay()">ИГРАТЬ ▶️</button>
+    <button class="btn btn-s" onclick="exportCode()">📤 ПОЛУЧИТЬ КОД</button>
 </div>
 
 <div id="sc-game" class="screen">
-    <div id="q-text"></div>
+    <div id="q-text" style="font-weight:900; text-align:center; margin-bottom:10px;"></div>
     <div id="stage"></div>
     <div id="joy"><div id="stick"></div></div>
     <div id="options" class="grid"></div>
@@ -73,116 +60,122 @@
 <script>
     const modes = [
         {id:'maze', n:'Лабиринт', e:'👾'}, {id:'mole', n:'Кроты', e:'🔨'}, 
-        {id:'quiz', n:'Викторина', e:'📝'}, {id:'tf', n:'Да/Нет', e:'✔️'},
-        {id:'pairs', n:'Пары', e:'👥'}, {id:'sort', n:'Сортировка', e:'↔️'}
+        {id:'plane', n:'Самолет', e:'✈️'}, {id:'cards', n:'Карты', e:'💡'},
+        {id:'quiz', n:'Тест', e:'📝'}, {id:'tf', n:'Да/Нет', e:'✔️'}, {id:'pairs', n:'Пары', e:'👥'}
     ];
     
-    const aiData = [
-        {t:"Существительное", q:"Сущ. 3-склонения:", a:["Мышь", "Дом", "Конь"], c:0},
-        {t:"Глагол", q:"Где инфинитив?", a:["Петь", "Пою", "Пел"], c:0},
-        {t:"Орфография", q:"Как пишется Ж..раф?", a:["и", "ы", "е"], c:0},
-        {t:"Пунктуация", q:"Запятая перед 'что':", a:["Всегда", "Никогда", "Иногда"], c:0}
+    const aiTopics = [
+        {t:"Сущ.", q:"3-е склонение:", a:["Мышь", "Дом", "Окно"]},
+        {t:"Глагол", q:"Инфинитив:", a:["Петь", "Пою", "Пел"]},
+        {t:"Прилаг.", q:"Лишнее слово:", a:["Бег", "Белый", "Яркий"]},
+        {t:"Местоим.", q:"Личное:", a:["Я", "Мой", "Твой"]},
+        {t:"Наречие", q:"Вопрос 'Как?':", a:["Быстро", "Синий", "Урок"]},
+        {t:"Предлог", q:"Найди его:", a:["В", "И", "Но"]},
+        {t:"Союз", q:"Запятая перед:", a:["Но", "И", "Или"]},
+        {t:"Числит.", q:"Порядковое:", a:["Пятый", "Пять", "Пятерка"]},
+        {t:"Обращение", q:"Выделится:", a:["Запятой", "Тире", "Точкой"]},
+        {t:"Корень", q:"Основа слова:", a:["Корень", "Суффикс", "Оконч."]},
+        {t:"Фонетика", q:"Звук [А]:", a:["Гласный", "Согл.", "Мягкий"]},
+        {t:"Синтаксис", q:"Подлежащее:", a:["Кто? Что?", "Где?", "Как?"]},
+        {t:"Лексика", q:"Синоним 'Умный':", a:["Мудрый", "Злой", "Глупый"]}
     ];
 
-    let mode = '', qs = [], cur = 0, score = 0, px=50, py=50;
+    let mode = '', qs = [], cur = 0, score = 0, px=20, py=20;
 
     modes.forEach(m => {
-        const d = document.createElement('div'); d.className = 'card';
-        d.innerHTML = `<span>${m.e}</span><b>${m.n}</b>`;
-        d.onclick = () => { mode = m.id; show('sc-edit'); initEdit(); };
-        document.getElementById('menu-box').appendChild(d);
+        const d = document.createElement('div'); d.className='card'; d.innerHTML=`<span>${m.e}</span><br><b>${m.n}</b>`;
+        d.onclick=()=>{ mode=m.id; show('sc-edit'); }; document.getElementById('menu-box').appendChild(d);
     });
 
-    function initEdit() {
-        const box = document.getElementById('ai-topics'); box.innerHTML = '';
-        aiData.forEach(d => {
-            const b = document.createElement('button'); b.className = 'btn'; b.style="background:var(--ai); font-size:11px; padding:10px";
-            b.innerText = d.t; b.onclick = () => addQ(d.q, d.a, d.c); box.appendChild(b);
-        });
-    }
+    aiTopics.forEach(t => {
+        const b = document.createElement('button'); b.className='btn-ai'; b.style="font-size:9px; padding:5px; border:none; color:white; border-radius:10px; cursor:pointer;";
+        b.innerText=t.t; b.onclick=()=>addQ(t.q, t.a); document.getElementById('ai-list').appendChild(b);
+    });
 
-    function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+    function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
-    function addQ(q='', a=['','',''], c=0) {
-        const d = document.createElement('div'); d.className = 'card'; d.style='margin-bottom:12px; text-align:left; padding:15px; border-left:8px solid var(--ai)';
-        d.innerHTML = `<input type="text" placeholder="Вопрос..." value="${q}" class="qi" style="width:100%; padding:10px; margin-bottom:8px; border-radius:10px; border:1px solid #ddd;">
-            ${[0,1,2].map(i => `<div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
-                <input type="radio" name="r${Math.random()}" ${i===c?'checked':''}>
-                <input type="text" placeholder="Ответ" value="${a[i]||''}" class="ai" style="width:100%; padding:8px; border-radius:8px; border:1px solid #eee;">
+    function addQ(q='', a=['','','']){
+        const qId = 'group' + Math.random().toString(36).substr(2, 9);
+        const div = document.createElement('div'); div.className='card'; div.style="text-align:left;";
+        div.innerHTML=`<input class="qi" value="${q}" placeholder="Вопрос..." style="width:100%; border-radius:8px; border:1px solid #ddd; padding:8px; margin-bottom:10px; box-sizing:border-box;">
+            ${[0,1,2].map(i=>`<div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
+                <input type="radio" name="${qId}" ${i==0?'checked':''} class="ok radio-check">
+                <input class="ai" value="${a[i]}" placeholder="Ответ ${i+1}" style="width:100%; border-radius:8px; border:1px solid #eee; padding:5px;">
             </div>`).join('')}`;
-        document.getElementById('factory').appendChild(d);
+        document.getElementById('factory').appendChild(div);
     }
 
-    function startPlay() { 
+    function save(){
         qs = [];
-        document.querySelectorAll('#factory > .card').forEach(c => {
-            let opts = []; c.querySelectorAll('.ai').forEach((inp, i) => opts.push({t: inp.value, ok: c.querySelectorAll('input[type="radio"]')[i].checked}));
-            qs.push({q: c.querySelector('.qi').value, opts});
+        document.querySelectorAll('#factory .card').forEach(c=>{
+            let opts = []; 
+            const rows = c.querySelectorAll('div[style*="display:flex"]');
+            rows.forEach(row => {
+                const text = row.querySelector('.ai').value;
+                const isCorrect = row.querySelector('.ok').checked;
+                if(text) opts.push({t: text, ok: isCorrect});
+            });
+            if(c.querySelector('.qi').value) qs.push({q: c.querySelector('.qi').value, opts});
         });
-        if(qs.length) { cur = 0; score = 0; show('sc-game'); render(); } 
     }
 
-    function render() {
-        const it = qs[cur]; const st = document.getElementById('stage'); const op = document.getElementById('options');
-        st.innerHTML = ""; op.innerHTML = ""; document.getElementById('joy').style.display = (mode==='maze'?'block':'none');
-        document.getElementById('q-text').innerText = it.q;
+    function startPlay(){ save(); if(qs.length){ cur=0; score=0; show('sc-game'); render(); } }
 
-        if(mode === 'maze') {
-            st.innerHTML = '<div id="player"></div>'; px=20; py=20; updateP();
-            it.opts.forEach((o, i) => {
-                const target = document.createElement('div'); target.className = 'mole up'; target.innerText = o.t;
-                target.style.left = (10 + i*30) + '%'; target.style.top = '180px'; target.dataset.ok = o.ok;
-                st.appendChild(target);
+    function render(){
+        const it = qs[cur]; const st = document.getElementById('stage'); const op = document.getElementById('options');
+        st.innerHTML=''; op.innerHTML=''; document.getElementById('q-text').innerText=it.q;
+        document.getElementById('joy').style.display = (mode==='maze'?'block':'none');
+        
+        if(mode==='maze'){
+            st.innerHTML='<div id="player"></div>'; px=20; py=20; updateP();
+            it.opts.forEach((o,i)=>{
+                let t=document.createElement('div'); t.className='target up'; t.innerText=o.t;
+                t.style.left=(10+i*33)+'%'; t.style.top='180px'; t.dataset.ok=o.ok; st.appendChild(t);
             });
             initJoy();
-        } else if(mode === 'mole') {
-            it.opts.forEach((o, i) => {
-                const m = document.createElement('div'); m.className = 'mole'; m.innerText = o.t;
-                m.style.left = (15 + i*30) + '%'; m.onclick = () => check(o.ok, m);
-                st.appendChild(m); setTimeout(() => m.classList.add('up'), 200 + i*200);
+        } else if(mode==='mole'){
+            it.opts.forEach((o,i)=>{
+                let m=document.createElement('div'); m.className='target'; m.innerText=o.t;
+                m.style.left=(10+i*33)+'%'; m.onclick=()=>check(o.ok, m); st.appendChild(m);
+                setTimeout(()=>m.classList.add('up'), 200+i*200);
             });
         } else {
-            it.opts.forEach(o => {
-                const b = document.createElement('button'); b.className = 'btn btn-p'; b.innerText = o.t;
-                b.onclick = () => check(o.ok, b); op.appendChild(b);
+            it.opts.forEach(o=>{
+                let b=document.createElement('button'); b.className='btn btn-p'; b.innerText=o.t;
+                b.onclick=()=>check(o.ok, b); op.appendChild(b);
             });
         }
     }
 
-    function check(ok, el) {
-        if(ok) { 
-            score += 100; document.getElementById('score-val').innerText = score + " ⭐";
-            confetti({ particleCount: 150, spread: 70 });
-            cur++; setTimeout(() => { if(cur < qs.length) render(); else finish(); }, 600);
-        } else { el.style.background = 'var(--red)'; setTimeout(() => el.style.background = '', 500); }
+    function check(ok, el){
+        if(ok === true || ok === "true"){ 
+            score+=100; document.getElementById('score-val').innerText=score; confetti(); cur++;
+            if(cur<qs.length) setTimeout(render, 600); else finish();
+        } else { el.style.background='var(--red)'; setTimeout(()=>el.style.background='', 400); }
     }
 
-    function updateP() { const p = document.getElementById('player'); if(p){p.style.left=px+'px'; p.style.top=py+'px';} }
-    
-    function initJoy() {
-        const b = document.getElementById('joy'), s = document.getElementById('stick');
-        b.ontouchmove = (e) => {
-            let t = e.touches[0], r = b.getBoundingClientRect(), x = t.clientX-r.left-50, y = t.clientY-r.top-50;
-            let ang = Math.atan2(y,x), d = Math.min(Math.sqrt(x*x+y*y),30);
-            s.style.transform = `translate(${Math.cos(ang)*d}px,${Math.sin(ang)*d}px)`;
-            px += Math.cos(ang)*8; py += Math.sin(ang)*8; updateP();
-            document.querySelectorAll('.mole').forEach(m => {
-                let r1 = document.getElementById('player').getBoundingClientRect(), r2 = m.getBoundingClientRect();
-                if(!(r1.right<r2.left||r1.left>r2.right||r1.bottom<r2.top||r1.top>r2.bottom)) check(m.dataset.ok==='true', m);
+    function updateP(){ let p=document.getElementById('player'); if(p){p.style.left=px+'px'; p.style.top=py+'px';} }
+    function initJoy(){
+        const j=document.getElementById('joy'), s=document.getElementById('stick');
+        j.ontouchmove=(e)=>{
+            let t=e.touches[0], r=j.getBoundingClientRect(), x=t.clientX-r.left-50, y=t.clientY-r.top-50;
+            let ang=Math.atan2(y,x), d=Math.min(Math.sqrt(x*x+y*y),30);
+            s.style.transform=`translate(${Math.cos(ang)*d}px,${Math.sin(ang)*d}px)`;
+            px+=Math.cos(ang)*8; py+=Math.sin(ang)*8; updateP();
+            document.querySelectorAll('.target').forEach(m=>{
+                let r1=document.getElementById('player').getBoundingClientRect(), r2=m.getBoundingClientRect();
+                if(!(r1.right<r2.left||r1.left>r2.right||r1.bottom<r2.top||r1.top>r2.bottom)) check(m.dataset.ok, m);
             });
         };
     }
 
-    function finish() {
-        confetti({ particleCount: 500, spread: 180 });
-        document.getElementById('stage').innerHTML = `<div style="text-align:center; padding-top:100px;"><h1>УРА! 🎉</h1><h2>Счет: ${score}</h2><button class="btn btn-ai" onclick="location.reload()">В МЕНЮ</button></div>`;
-    }
+    function finish(){ confetti({particleCount:400}); document.getElementById('stage').innerHTML=`<div style="text-align:center; padding-top:100px;"><h1>🎉 ПОБЕДА!</h1><h2>Баллы: ${score}</h2><button class="btn btn-ai" onclick="location.reload()">В МЕНЮ</button></div>`; }
 
-    function exportCode() { prompt("Твой код:", btoa(unescape(encodeURIComponent(JSON.stringify({m: mode, q: qs}))))); }
-    function importGame() {
-        const code = prompt("Вставь код:"); if(!code) return;
-        const dec = JSON.parse(decodeURIComponent(escape(atob(code))));
-        mode = dec.m; qs = dec.q; cur = 0; score = 0; show('sc-game'); render();
+    function exportCode(){ save(); alert("Код скопирован!"); navigator.clipboard.writeText(btoa(unescape(encodeURIComponent(JSON.stringify({m: mode, q: qs}))))); }
+    function importGame(){
+        let code = prompt("Вставь код игры:"); if(!code) return;
+        let d = JSON.parse(decodeURIComponent(escape(atob(code))));
+        mode=d.m; qs=d.q; cur=0; score=0; show('sc-game'); render();
     }
 </script>
 </body>
